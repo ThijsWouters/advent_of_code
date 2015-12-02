@@ -1,38 +1,43 @@
 defmodule AdventOfCode.Day2 do
+  defmodule Package do
+    defstruct [:height, :length, :width]
+
+    def paper(%Package{height: height, length: length, width: width}) do
+      first = length * height
+      second = length * width
+      third = height * width
+      2*first + 2*second + 2*third + Enum.min([first, second, third])
+    end
+
+    def from_string(""), do: :error
+    def from_string(string) do
+      [height, length, width] = String.split(string, "x")
+      |> Enum.map(&Integer.parse/1)
+      |> Enum.map(fn {int, ""} -> int end)
+
+      %Package{height: height, length: length, width: width}
+    end
+  end
+
   @doc """
-  iex> solve("2x3x4")
+  iex> paper("2x3x4")
   58
 
-  iex> solve("1x1x10")
+  iex> paper("1x1x10")
   43
   """
-  def solve(input) when is_binary(input) do
+  def paper(input) do
+    parse(input)
+    |> Enum.reject(&error?/1)
+    |> Enum.map(&Package.paper/1)
+    |> Enum.reduce(0, &+/2)
+  end
+
+  defp parse(input) do
     String.split(input, "\n")
-    |> solve
+    |> Enum.map(&Package.from_string/1)
   end
 
-  def solve([]), do: 0
-  def solve([head | tail]) do
-    solve_one(head) + solve(tail)
-  end
-
-  defp solve_one(""), do: 0
-  defp solve_one(package) when is_binary(package) do
-    String.split(package, "x")
-    |> Enum.map(fn string ->
-      case Integer.parse(string) do
-        {int, ""} -> int
-        {_, _} -> raise "Not all are integer: '#{string}'"
-        :error -> raise "Error: '#{string}'"
-      end
-    end)
-    |> amount_of_wrapping_paper
-  end
-
-  defp amount_of_wrapping_paper([l, h, w]) do
-    first = l * h
-    second = l * w
-    third = h * w
-    2*first + 2*second + 2*third + Enum.min([first, second, third])
-  end
+  defp error?(:error), do: true
+  defp error?(_), do: false
 end
