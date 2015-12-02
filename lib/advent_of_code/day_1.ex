@@ -1,53 +1,58 @@
 defmodule AdventOfCode.Day1 do
   @doc """
-  iex> AdventOfCode.Day1.solve("(())")
+  iex> AdventOfCode.Day1.floor("(())")
   0
 
-  iex> AdventOfCode.Day1.solve("()()")
+  iex> AdventOfCode.Day1.floor("()()")
   0
 
-  iex> AdventOfCode.Day1.solve("(((")
+  iex> AdventOfCode.Day1.floor("(((")
   3
 
-  iex> AdventOfCode.Day1.solve("(()(()(")
+  iex> AdventOfCode.Day1.floor("(()(()(")
   3
 
-  iex> AdventOfCode.Day1.solve("))(((((")
+  iex> AdventOfCode.Day1.floor("))(((((")
   3
 
-  iex> AdventOfCode.Day1.solve("())")
+  iex> AdventOfCode.Day1.floor("())")
   -1
 
-  iex> AdventOfCode.Day1.solve("))(")
+  iex> AdventOfCode.Day1.floor("))(")
   -1
 
-  iex> AdventOfCode.Day1.solve(")))")
+  iex> AdventOfCode.Day1.floor(")))")
   -3
 
-  iex> AdventOfCode.Day1.solve(")())())")
+  iex> AdventOfCode.Day1.floor(")())())")
   -3
   """
-  def solve(input) when is_binary(input), do: solve(String.graphemes(input), 0)
-  defp solve([], acc), do: acc
-  defp solve(["(" | tail], acc), do: solve(tail, acc + 1)
-  defp solve([")" | tail], acc), do: solve(tail, acc - 1)
+  def floor(input) when is_binary(input) do
+    String.graphemes(input)
+    |> floor
+  end
+
+  def floor(list) when is_list(list) do
+    Enum.map(list, &up_or_down/1)
+    |> Enum.reduce(0, &+/2)
+  end
+
+  defp up_or_down("("), do: 1
+  defp up_or_down(")"), do: -1
 
   @doc """
-  iex> AdventOfCode.Day1.part_2(")")
+  iex> AdventOfCode.Day1.first_time_in_basement(")")
   1
 
-  iex> AdventOfCode.Day1.part_2("()())")
+  iex> AdventOfCode.Day1.first_time_in_basement("()())")
   5
   """
-  def part_2(input) when is_binary(input), do: part_2(String.graphemes(input), [], 0)
-
-  defp part_2([], [], _acc), do: nil
-  defp part_2([], _check, acc), do: acc
-  defp part_2([head | tail], check, acc) do
-    if solve(check, 0) >= 0 do
-      part_2(tail, Enum.concat(check, [head]), acc + 1)
-    else
-      acc
+  def first_time_in_basement(input) when is_binary(input) do
+    case Enum.map((1..String.length(input)), fn length -> String.slice(input, 0, length) end)
+    |> Enum.map(&floor/1)
+    |> Enum.find_index(fn floor -> floor < 0 end) do
+      nil -> :never
+      result -> result + 1
     end
   end
 end
