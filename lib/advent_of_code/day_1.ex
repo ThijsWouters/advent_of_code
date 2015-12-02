@@ -31,4 +31,23 @@ defmodule AdventOfCode.Day1 do
   defp solve([], acc), do: acc
   defp solve(["(" | tail], acc), do: solve(tail, acc + 1)
   defp solve([")" | tail], acc), do: solve(tail, acc - 1)
+
+  @doc """
+  iex> AdventOfCode.Day1.part_2(")")
+  1
+
+  iex> AdventOfCode.Day1.part_2("()())")
+  5
+  """
+  def part_2(input) when is_binary(input), do: part_2(String.graphemes(input), [], 0)
+
+  defp part_2([], [], _acc), do: nil
+  defp part_2([], _check, acc), do: acc
+  defp part_2([head | tail], check, acc) do
+    if solve(check, 0) >= 0 do
+      part_2(tail, Enum.concat(check, [head]), acc + 1)
+    else
+      acc
+    end
+  end
 end

@@ -1,5 +1,5 @@
 defmodule AdventOfCode.Day1Test do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest AdventOfCode.Day1
 
   import AdventOfCode.Day1
@@ -14,5 +14,21 @@ defmodule AdventOfCode.Day1Test do
 
   test "a closing parentheses subtracts a floor" do
     assert solve(")") == -1
+  end
+
+  test "an empty string is nil" do
+    assert part_2("") == nil
+  end
+
+  test "a lone closing parentheses gives 1" do
+    assert part_2(")") == 1
+  end
+
+  test "multiple closing parentheses gives 1" do
+    assert part_2(")))))") == 1
+  end
+
+  test "return when first in basement" do
+    assert part_2("())") == 3
   end
 end
