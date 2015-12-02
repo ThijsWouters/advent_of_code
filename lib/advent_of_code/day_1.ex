@@ -27,8 +27,8 @@ defmodule AdventOfCode.Day1 do
   iex> AdventOfCode.Day1.solve(")())())")
   -3
   """
-  def solve([]), do: 0
-  def solve(input) when is_binary(input), do: solve(String.graphemes(input))
-  def solve(["(" | tail]), do: solve(tail) + 1
-  def solve([")" | tail]), do: solve(tail) - 1
+  def solve(input) when is_binary(input), do: solve(String.graphemes(input), 0)
+  defp solve([], acc), do: acc
+  defp solve(["(" | tail], acc), do: solve(tail, acc + 1)
+  defp solve([")" | tail], acc), do: solve(tail, acc - 1)
 end
