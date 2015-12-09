@@ -3,21 +3,29 @@ defmodule AdventOfCode.Day3 do
 
   def at_least_one_present(input) do
     input
-    |> String.graphemes
-    |> visited_places
+    |> Movement.parse
+    |> visited_houses
+    |> count_unique_houses
+  end
+
+  def visited_houses(movements) do
+    visited_houses(movements, {0, 0}, [])
+  end
+
+  defp visited_houses([], current_house, houses_visited) do
+    Enum.concat(houses_visited, [current_house])
+  end
+
+  defp visited_houses([head|tail], current_house, houses_visited) do
+    visited_houses(
+      tail,
+      Movement.move(current_house, head),
+      Enum.concat(houses_visited, [current_house]))
+  end
+
+  defp count_unique_houses(houses) do
+    houses
     |> Enum.uniq
     |> Enum.count
-  end
-
-  def visited_places(movements) do
-    visited_places(movements, {0, 0}, [])
-  end
-
-  defp visited_places([], current, visited), do: Enum.concat(visited, [current])
-  defp visited_places([head|tail], current, visited) do
-    visited_places(
-      tail,
-      Movement.move(current, head),
-      Enum.concat(visited, [current]))
   end
 end

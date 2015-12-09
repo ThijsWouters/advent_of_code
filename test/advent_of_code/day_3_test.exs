@@ -19,14 +19,14 @@ defmodule AdventOfCode.Day3Test do
   end
 
   test "[] is [{0, 0}]" do
-    assert Day3.visited_places([]) == [{0, 0}]
+    assert Day3.visited_houses([]) == [{0, 0}]
   end
 
   test "> is [{0, 0}, {0, 1}]" do
-    assert Day3.visited_places([">"]) == [{0, 0}, {0, 1}]
+    assert Day3.visited_houses([">"]) == [{0, 0}, {0, 1}]
   end
 
   test "^>v< is [{0, 0}, {-1, 0}, {-1, 1}, {0, 1}, {0, 0}]" do
-    assert Day3.visited_places(["^", ">", "v", "<"]) == [{0, 0}, {-1, 0}, {-1, 1}, {0, 1}, {0, 0}]
+    assert Day3.visited_houses(["^", ">", "v", "<"]) == [{0, 0}, {-1, 0}, {-1, 1}, {0, 1}, {0, 0}]
   end
 end
