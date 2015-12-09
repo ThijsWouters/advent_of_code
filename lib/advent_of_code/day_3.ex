@@ -8,6 +8,16 @@ defmodule AdventOfCode.Day3 do
     |> count_unique_houses
   end
 
+  def with_robo_santa(input) do
+    all = input
+    |> Movement.parse
+    santa = Enum.take_every(all, 2)
+    [_|for_robo] = all
+    robo_santa = Enum.take_every(for_robo, 2)
+    Enum.concat(visited_houses(santa), visited_houses(robo_santa))
+    |> count_unique_houses
+  end
+
   def visited_houses(movements) do
     visited_houses(movements, {0, 0}, [])
   end
