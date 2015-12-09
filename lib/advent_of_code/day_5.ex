@@ -5,20 +5,15 @@ defmodule AdventOfCode.Day5 do
   end
 
   def nice?(string) do
-    at_least_three_vowels?(string) &&
-    at_least_one_letter_twice_in_a_row(string) &&
-    !contains_illegal_sequence(string)
+    letter_pair_appears_at_least_twice(string) &&
+    repeat_with_one_letter_in_between(string)
   end
 
-  defp at_least_three_vowels?(string) do
-    string =~ ~r/[aeiou].*[aeiou].*[aeiou]/
+  defp letter_pair_appears_at_least_twice(string) do
+    string =~ ~r/([a-zA-Z]{2}).*\1/
   end
 
-  defp at_least_one_letter_twice_in_a_row(string) do
-    string =~ ~r/([a-z])\1/
-  end
-
-  defp contains_illegal_sequence(string) do
-    string =~ ~r/(ab|cd|pq|xy)/
+  defp repeat_with_one_letter_in_between(string) do
+    string =~ ~r/([a-zA-Z]).\1/
   end
 end
