@@ -4,7 +4,7 @@ defmodule AdventOfCode.Day6.Grid do
 
   def new(rows \\ 1000, columns \\ 1000) do
     Enum.map(1..rows, fn _ ->
-      Enum.map(1..columns, fn _ -> false end)
+      Enum.map(1..columns, fn _ -> Light.new end)
     end)
   end
 

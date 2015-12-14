@@ -2,6 +2,10 @@ defmodule AdventOfCode.Day6.LightTest do
   use ExUnit.Case
   alias AdventOfCode.Day6.Light
 
+  test "a new light is off" do
+    assert Light.new == false
+  end
+
   test "turn_on: an off lamp turns on" do
     assert Light.act(:turn_on, false) == true
   end
