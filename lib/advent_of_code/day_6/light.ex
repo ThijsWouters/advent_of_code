@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Day6.Light do
-  def new, do: false
-  def act(:turn_on, _), do: true
-  def act(:turn_off, _), do: false
-  def act(:toggle, true), do: false
-  def act(:toggle, false), do: true
+  def new, do: 0
+  def act(:turn_on, value), do: value + 1
+  def act(:turn_off, 0), do: 0
+  def act(:turn_off, value), do: value - 1
+  def act(:toggle, value), do: value + 2
 end
