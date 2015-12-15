@@ -2,6 +2,11 @@ defmodule AdventOfCode.Day9 do
   alias AdventOfCode.Day9.Towns
 
   def shortest_route(input) do
+    routes_with_distance(input)
+    |> Enum.min_by(fn {_, distance} -> distance end)
+  end
+
+  defp routes_with_distance(input) do
     routes = parse(input) |> build_routes
     parse(input)
     |> all_towns
@@ -9,7 +14,6 @@ defmodule AdventOfCode.Day9 do
     |> Enum.map(fn route ->
       {route, total_distance(route, routes)}
     end)
-    |> Enum.min_by(fn {_, distance} -> distance end)
   end
 
   defp total_distance([], _), do: 0
