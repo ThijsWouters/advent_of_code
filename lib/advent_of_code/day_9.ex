@@ -6,6 +6,11 @@ defmodule AdventOfCode.Day9 do
     |> Enum.min_by(fn {_, distance} -> distance end)
   end
 
+  def longest_route(input) do
+    routes_with_distance(input)
+    |> Enum.max_by(fn {_, distance} -> distance end)
+  end
+
   defp routes_with_distance(input) do
     routes = parse(input) |> build_routes
     parse(input)
