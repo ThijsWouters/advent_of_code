@@ -2,9 +2,12 @@ defmodule AdventOfCode.Day13 do
   alias AdventOfCode.Day13.Guests
 
   def most_happiness(input) do
-    guests = String.split(input, "\n")
+    String.split(input, "\n")
     |> parse
+    |> most_happiness
+  end
 
+  def most_happiness(guests) do
     Permutations.permute(Guests.all(guests))
     |> Enum.map(fn seating_arrangement ->
       List.insert_at(seating_arrangement, -1, Enum.fetch!(seating_arrangement, 0))
