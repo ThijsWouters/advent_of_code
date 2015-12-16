@@ -7,11 +7,14 @@ defmodule AdventOfCode.Day10 do
   def look_and_say(string) do
     split_in_same_chars(string)
     |> Enum.map(&Task.async(fn ->
-      list = [head | _ ] = &1
-      "#{length(list)}#{head}"
+      calculate(&1)
     end))
     |> Enum.map(&Task.await/1)
     |> Enum.join
+  end
+
+  defp calculate(list = [head | _]) do
+    "#{length(list)}#{head}"
   end
 
   defp split_in_same_chars(string) do
