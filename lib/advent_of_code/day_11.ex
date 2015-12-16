@@ -1,6 +1,7 @@
 defmodule AdventOfCode.Day11 do
   def next_valid_password(old) do
     Stream.iterate(old, &password/1)
+    |> Stream.drop(1)
     |> Stream.filter(&valid?/1)
     |> Enum.fetch!(0)
   end
