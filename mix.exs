@@ -27,6 +27,8 @@ defmodule AdventOfCode.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [
+      {:poison, "~>1.5"}
+    ]
   end
 end
