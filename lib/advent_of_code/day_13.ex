@@ -1,13 +1,20 @@
 defmodule AdventOfCode.Day13 do
   alias AdventOfCode.Day13.Guests
 
-  def most_happiness(input) do
+  def most_happiness_for(input) do
     String.split(input, "\n")
     |> parse
     |> most_happiness
   end
 
-  def most_happiness(guests) do
+  def most_happiness_with_me(input) do
+    String.split(input, "\n")
+    |> parse
+    |> add_me
+    |> most_happiness
+  end
+
+  defp most_happiness(guests) do
     Permutations.permute(Guests.all(guests))
     |> Enum.map(fn seating_arrangement ->
       List.insert_at(seating_arrangement, -1, Enum.fetch!(seating_arrangement, 0))
@@ -17,6 +24,15 @@ defmodule AdventOfCode.Day13 do
         total_happiness(seating_arrangement, guests) + total_happiness(Enum.reverse(seating_arrangement), guests)}
     end)
     |> Enum.max_by(fn {_, happiness} -> happiness end)
+  end
+
+  defp add_me(guests) do
+    Guests.all(guests)
+    |> Enum.reduce(guests, fn guest, guests ->
+      guests
+      |> Guests.add(guest, "Me", 0)
+      |> Guests.add("Me", guest, 0)
+    end)
   end
 
   defp total_happiness([], _), do: 0
