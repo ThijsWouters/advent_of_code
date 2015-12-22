@@ -1,9 +1,6 @@
 defmodule AdventOfCode.Day17 do
-  def different_combinations(input, eggnog) do
-    String.split(input, "\n")
-    |> Enum.map(&String.to_integer/1)
-    |> all_combinations
-    |> Enum.filter(fn combination -> Enum.sum(combination) == eggnog end)
+  def all_containers(input, eggnog) do
+    different_combinations(input, eggnog)
     |> length
   end
 
@@ -13,5 +10,12 @@ defmodule AdventOfCode.Day17 do
     [[head]]
     |> Enum.concat(all_combinations(rest))
     |> Enum.concat(Enum.map(all_combinations(rest), &List.insert_at(&1, 0, head)))
+  end
+
+  defp different_combinations(input, eggnog) do
+    String.split(input, "\n")
+    |> Enum.map(&String.to_integer/1)
+    |> all_combinations
+    |> Enum.filter(fn combination -> Enum.sum(combination) == eggnog end)
   end
 end
