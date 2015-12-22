@@ -12,6 +12,7 @@ defmodule AdventOfCode.Day18 do
     end)
     |> Grid.new
     |> next(steps)
+    |> Map.get(:data)
     |> Tuple.to_list
     |> Enum.map(&Tuple.to_list/1)
     |> List.flatten

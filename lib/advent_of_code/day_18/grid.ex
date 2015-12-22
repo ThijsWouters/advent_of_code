@@ -1,6 +1,9 @@
 defmodule AdventOfCode.Day18.Grid do
+  defstruct [:data]
+  alias __MODULE__
+
   def new(data) when is_list(data) do
-    list_to_data(data)
+    %Grid{data: list_to_data(data)}
   end
 
   defp list_to_data(data) do
@@ -18,23 +21,31 @@ defmodule AdventOfCode.Day18.Grid do
     |> list_to_data
   end
 
-  def size(grid) do
+  def size(%Grid{data: grid}) do
     tuple_size(grid)
   end
 
-  def cell_status(_, x, y) when x < 0 or y < 0, do: 0
-  def cell_status(grid, x, y) when tuple_size(grid) <= x or tuple_size(grid) <= y, do: 0
-  def cell_status(grid, x, y) do
+  defp cell_status(_, x, y) when x < 0 or y < 0, do: 0
+  defp cell_status(grid, x, y) when tuple_size(grid) <= x or tuple_size(grid) <= y, do: 0
+  defp cell_status(_, 0, 0), do: 1
+  defp cell_status(grid, 0, y) when tuple_size(grid)-1 == y, do: 1
+  defp cell_status(grid, x, 0) when tuple_size(grid)-1 == x, do: 1
+  defp cell_status(grid, x, y) when tuple_size(grid)-1 == x and tuple_size(grid)-1 == y, do: 1
+  defp cell_status(grid, x, y) do
     grid
     |> elem(y)
     |> elem(x)
   end
 
-  def next(grid) do
-    new_data(size(grid), &next_cell_status(grid, &1, &2))
+  def next(grid = %Grid{data: data}) do
+    %Grid{data: new_data(size(grid), &next_cell_status(data, &1, &2))}
   end
 
-  def next_cell_status(grid, x, y) do
+  defp next_cell_status(_, 0, 0), do: 1
+  defp next_cell_status(grid, 0, y) when tuple_size(grid)-1 == y, do: 1
+  defp next_cell_status(grid, x, 0) when tuple_size(grid)-1 == x, do: 1
+  defp next_cell_status(grid, x, y) when tuple_size(grid)-1 == x and tuple_size(grid)-1 == y, do: 1
+  defp next_cell_status(grid, x, y) do
     case {cell_status(grid, x, y), alive_neighbours(grid, x, y)} do
       {1, 2} -> 1
       {1, 3} -> 1
@@ -52,5 +63,20 @@ defmodule AdventOfCode.Day18.Grid do
     |> List.flatten
     |> Enum.sum
     total - cell_status(grid, x, y)
+  end
+end
+
+defimpl String.Chars, for: AdventOfCode.Day18.Grid do
+  def to_string(%AdventOfCode.Day18.Grid{data: data}) do
+    Tuple.to_list(data)
+    |> Enum.map(&Tuple.to_list/1)
+    |> Enum.map(fn row ->
+      Enum.map(row, fn
+        1 -> "#"
+        0 -> "."
+      end)
+      |> Enum.join
+    end)
+    |> Enum.join("\n")
   end
 end
