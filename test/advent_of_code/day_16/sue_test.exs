@@ -22,6 +22,30 @@ defmodule AdventOfCode.Day16.SueTest do
     assert Sue.matches?(%Sue{properties: %{"perfume" => 3}}, "cars", 3)
   end
 
+  test "a Sue matches when cats property is greater than" do
+    refute Sue.matches?(%Sue{properties: %{"cats" => 1}}, "cats", 2)
+    refute Sue.matches?(%Sue{properties: %{"cats" => 2}}, "cats", 2)
+    assert Sue.matches?(%Sue{properties: %{"cats" => 3}}, "cats", 2)
+  end
+
+  test "a Sue matches when trees property is greater than" do
+    refute Sue.matches?(%Sue{properties: %{"trees" => 1}}, "trees", 2)
+    refute Sue.matches?(%Sue{properties: %{"trees" => 2}}, "trees", 2)
+    assert Sue.matches?(%Sue{properties: %{"trees" => 3}}, "trees", 2)
+  end
+
+  test "a Sue matches when pomeranians property is less than" do
+    assert Sue.matches?(%Sue{properties: %{"pomeranians" => 1}}, "pomeranians", 2)
+    refute Sue.matches?(%Sue{properties: %{"pomeranians" => 2}}, "pomeranians", 2)
+    refute Sue.matches?(%Sue{properties: %{"pomeranians" => 3}}, "pomeranians", 2)
+  end
+
+  test "a Sue matches when goldfish property is less than" do
+    assert Sue.matches?(%Sue{properties: %{"goldfish" => 1}}, "goldfish", 2)
+    refute Sue.matches?(%Sue{properties: %{"goldfish" => 2}}, "goldfish", 2)
+    refute Sue.matches?(%Sue{properties: %{"goldfish" => 3}}, "goldfish", 2)
+  end
+
   test "parse Sue from string" do
     assert Sue.parse("Sue 4: trees: 4, vizslas: 4, goldfish: 9") ==
     %Sue {

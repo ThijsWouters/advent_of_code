@@ -15,9 +15,22 @@ defmodule AdventOfCode.Day16.Sue do
     %Sue{number: number, properties: properties}
   end
 
-  def matches?(sue, property, amount) do
+  def matches?(sue, "cats", amount) do
+    matches?(sue, "cats", amount, fn value, amount -> value > amount end)
+  end
+  def matches?(sue, "trees", amount) do
+    matches?(sue, "trees", amount, fn value, amount -> value > amount end)
+  end
+  def matches?(sue, "pomeranians", amount) do
+    matches?(sue, "pomeranians", amount, fn value, amount -> value < amount end)
+  end
+  def matches?(sue, "goldfish", amount) do
+    matches?(sue, "goldfish", amount, fn value, amount -> value < amount end)
+  end
+
+  def matches?(sue, property, amount, check \\ (fn value, amount -> value == amount end)) do
     case Dict.fetch(sue.properties, property) do
-      {:ok, value} -> value == amount
+      {:ok, value} -> check.(value, amount)
       :error -> true
     end
   end
