@@ -2,15 +2,29 @@ defmodule AdventOfCode.Day21 do
   alias AdventOfCode.Day21.Character
 
   def least_gold do
-    boss = %Character{name: :boss, hit_points: 109, damage: 8, armor: 2}
-
     shop
     |> Enum.map(fn {cost, damage, armor} ->
       {cost, %Character{name: :player, hit_points: 100, damage: damage, armor: armor}}
     end)
+    |> Enum.sort_by(fn {cost, _} -> cost end)
     |> Enum.find(fn {_, player} ->
       Character.fight(player, boss).name == :player
     end)
+  end
+
+  def most_gold do
+    shop
+    |> Enum.map(fn {cost, damage, armor} ->
+      {cost, %Character{name: :player, hit_points: 100, damage: damage, armor: armor}}
+    end)
+    |> Enum.sort_by(fn {cost, _} -> -cost end)
+    |> Enum.find(fn {_, player} ->
+      Character.fight(player, boss).name == :boss
+    end)
+  end
+
+  defp boss do
+    %Character{name: :boss, hit_points: 109, damage: 8, armor: 2}
   end
 
   def shop do
@@ -49,7 +63,6 @@ defmodule AdventOfCode.Day21 do
     |> Enum.map(&Enum.reduce(&1, fn {cost, damage, armor}, {total_cost, total_damage, total_armor} ->
       {total_cost + cost, total_damage + damage, total_armor + armor}
     end))
-    |> Enum.sort_by(fn {cost, _, _} -> cost end)
   end
 
   def join(list1, list2, acc \\ [])
