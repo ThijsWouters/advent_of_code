@@ -1,8 +1,9 @@
 defmodule AdventOfCode.Day20.House do
   def presents(number) do
     sum = dividers(number)
+    |> Enum.filter(fn n -> div(number, n) <= 50 end)
     |> Enum.sum
-    sum * 10
+    sum * 11
   end
 
   defp dividers(n) do
